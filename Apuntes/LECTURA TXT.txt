@@ -1,0 +1,5 @@
+idempleado	nombre	apellidos	dni	FecNac
+1	Wilmer Joel	Sanchez	99999999	2000-01-01
+2	Alejandra	Cori Choque	99999999	2000-01-01
+3	Alexis	Olivares	99999999	2000-01-01
+4	Diego	Tipan	99999999	2000-01-01

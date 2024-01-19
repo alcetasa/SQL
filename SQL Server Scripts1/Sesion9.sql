@@ -1,0 +1,225 @@
+USE Northwind
+
+--CONSULTAR PROCEDIMIENTO   ---PROGAMMABILIY -  STORED PROCEDURES 
+EXECUTE sp_helptext 'custorderhist'
+GO
+
+--CREATE PROCEDURE CustOrderHist @CustomerID nchar(5)  
+--AS  
+--SELECT ProductName, Total=SUM(Quantity)  
+--FROM Products P, [Order Details] OD, Orders O, Customers C  
+--WHERE C.CustomerID = @CustomerID  
+--AND C.CustomerID = O.CustomerID AND O.OrderID = OD.OrderID AND OD.ProductID = P.ProductID  
+--GROUP BY ProductName  
+
+
+
+--MODIFICAR 
+--USAR EXEC SP_HELPTEXT PARA VIZUALIZAR EL BLOQUE DE UN PROCEDIMIENTO 
+ALTER PROCEDURE CustOrderHist @CustomerID nchar(5)  
+AS  
+SELECT ProductName, Total=SUM(Quantity)  
+FROM Products P, [Order Details] OD, Orders O, Customers C  
+WHERE C.CustomerID = @CustomerID  
+AND C.CustomerID = O.CustomerID AND O.OrderID = OD.OrderID AND OD.ProductID = P.ProductID  
+GROUP BY ProductName  
+GO
+
+--LA VISTA MUESTRA LOS	PROCEDIMIENTOS ALMACENADOS CREADOS POR EL USUARIO Y EL SISTEMA
+ 
+SELECT  * FROM SYS.PARAMETERS
+SELECT  DISTINCT(object_id)FROM SYS.PARAMETERS
+
+
+--CREAR UN PROCEDIMIENTO ALMACENADO SIN PARAMETROS--------------------------------
+CREATE PROCEDURE P1 AS 
+SELECT * FROM Orders
+GO
+--OTRA FORMA
+--CREAR UN PROCEDIMIENTO O MODIFICAR  ALMACENADO SIN PARAMETROS (SON COMO FUNCIONES)
+CREATE OR ALTER PROCEDURE P1 AS 
+SELECT * FROM Orders
+GO
+
+--CONSULTAR PROCEDIMIENTO ALMACENADO P1
+EXECUTE P1
+GO
+--CONSULTAR EL CODIGO DEL PROCEDIMIENTO ALMACENADO
+EXECUTE SP_HELPTEXT 'P1'
+--copio y 
+--MODIFICAR EL PROCEDIMIENTO ALMACENADO  P1 
+ALTER PROCEDURE P1
+AS   
+SELECT OrderID,CustomerID,EmployeeID,OrderDate FROM Orders  
+GO
+--CONSULTAR EL CODIGO DEL PROCEDIMIENTO ALMACENADO MODIFICADO
+EXECUTE SP_HELPTEXT P1
+
+--ELIMINAR UN PROCEDIMIENTO 
+DROP PROC P1
+GO
+
+--CREAR UN PROCEDIMIENTO ALMACENADO CON (1) PARAMETRO---------------------------------
+
+CREATE OR ALTER PROCEDURE P1 
+@orderid INT
+AS   
+SELECT OrderID,CustomerID,EmployeeID,OrderDate FROM Orders  
+WHERE Orderid =@orderid
+GO
+
+--CONSULTAR UN PROCEDIMIENTO ALMACENADO (SP) CON UN MARAMETRI
+EXECUTE P1 10250
+
+
+--CREAR UN PROCEDIMIENTO ALMACENADO CON (2) PARAMETROS---------------------------------
+
+--1
+CREATE OR ALTER PROCEDURE P1
+@finicio datetime,
+@ffin datetime
+AS   
+SELECT OrderID,CustomerID,EmployeeID,OrderDate FROM Orders  
+WHERE OrderDate between @finicio and @ffin
+GO
+
+--CONSULTAR  UN PROCEDIMIENTO ALMACENADO CON (2) PARAMETROS
+EXECUTE P1 '1997/01/01' ,'1997/01/31'
+
+--2 
+/*CREAR UN PROCEDIMIENTO ALMACENADO QUE DEVUELVA LA CANTIDAD DE ORDENES 
+EMITIDAS EN UN INTERVALO DE FECHAS*/
+
+CREATE OR ALTER PROCEDURE P1 
+@finicio datetime,
+@ffin datetime
+AS
+SELECT COUNT(OrderID)FROM Orders
+WHERE OrderDate between @finicio and @ffin
+GO
+--CONSULTAR  UN PROCEDIMIENTO ALMACENADO CON (2) PARAMETROS
+EXECUTE P1 '1997/01/01' ,'1997/01/31'
+
+--3
+/*CREAR UN PROCEDIMIENTO ALMACENADO QUE DEVUELVA LA CANTIDAD DE ORDENES 
+EMITIDAS EN UN INTERVALO DE FECHAS*/
+
+CREATE OR ALTER PROCEDURE P1 
+@emplid  int,
+@finicio datetime,
+@ffin datetime
+AS
+SELECT E.EmployeeID,E.LastName,E.FirstName,COUNT(O.OrderID) AS N_Ordenes FROM Orders AS O
+INNER JOIN Employees AS E
+ON E.EmployeeID=O.EmployeeID
+WHERE  E.EmployeeID=@emplid and OrderDate between @finicio and @ffin
+GROUP BY E.EmployeeID,E.LastName,E.FirstName
+GO
+
+EXECUTE P1 2,'1997/01/01' ,'1998/01/31'
+
+--4
+/*CREAR UN SP QUE DEVUELVA LA CANTIDAD DE ORDEN DE UN EMPLEADO
+UN DETERMINADO AÑO */
+
+CREATE OR  ALTER PROCEDURE P2
+@ecodigo INT,
+@anho INT
+AS
+	SELECT COUNT(*) AS 'CantOrdenes'
+	FROM Orders
+	WHERE EmployeeID=@ecodigo and year(OrderDate)=@anho
+GO
+
+EXECUTE P2  2,1998
+
+SELECT * FROM Orders
+SELECT * FROM Employees
+
+--5
+/*CREAR UN SP PARA ELIMINAR UN REGISTRO PROPORCIONANDO SU ORDERID*/
+
+--1 CREAR CON  VISTAS 
+CREATE OR ALTER  VIEW Orders2
+AS
+	SELECT * FROM Orders as O
+GO
+SELECT * FROM Orders2
+--2  COPIAR TABLA ORDENES
+SELECT * INTO Ordenes FROM Orders2
+GO
+SELECT * FROM Ordenes
+-- CREACION DE SP USANDO LAS 
+
+CREATE OR ALTER PROCEDURE P3 
+@orderid INT 
+AS 
+	DELETE FROM Ordenes
+	WHERE OrderID=@orderid
+GO
+
+EXEC P3 10251
+
+SELECT * FROM Ordenes
+SELECT * FROM Ordenes2 -- Observamos que si se borro 
+
+/*REALIZAR UNA COPIA DE LA CUSTOMERS Y SE LLAMARA CLIENTES Y  CREAR UN SP PARA ELIMINAR  REGISTROS DE ESTA TABLA*/
+
+--1  COPIAR TABLA CUSTOMERS
+SELECT * INTO Clientes FROM Customers
+GO
+SELECT * FROM Clientes
+
+CREATE OR ALTER PROCEDURE P4
+@country INT 
+AS 
+	DELETE FROM Clientes
+	WHERE Country=@country
+GO
+---
+CREATE OR ALTER PROCEDURE P5
+@costumerid nchar(5) 
+AS 
+	DELETE FROM Clientes
+	WHERE CustomerID=@costumerid
+GO
+--Invocando al SP
+EXEC P5 'ALFKI'
+
+SELECT * FROM Clientes
+
+--
+
+/*CREAR UNA TABLA ALUMNOS CON 4 CAMPOS,ID,AUTOGENERE,NOMBRE,APELLIDO,CELULAR*/
+
+CREATE TABLE alumnos(
+idalumno int identity(1,1),
+nombre varchar(50),
+apellido varchar(70),
+celular char(9))
+GO
+
+SELECT * FROM alumnos
+
+--Crear un SP para insertar datos a la tabla alumnos
+
+INSERT INTO alumnos VALUES('Alejandra','Cori','999999999')
+
+
+CREATE OR ALTER PROCEDURE P6
+@nombre varchar(50),
+@apellido varchar(70),
+@celular char(9)
+AS
+	INSERT INTO alumnos VALUES(@nombre,@apellido,@celular)
+GO
+
+EXECUTE P6 'Alvaro','Tauma','933911302'
+
+--ELIMINAR LOS REGISTROS DE UNA TABLA
+TRUNCATE TABLE Empleados 
+GO
+
+
+
+SELECT * FROM alumnos

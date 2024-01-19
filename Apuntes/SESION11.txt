@@ -1,0 +1,11 @@
+administrador de origen de datos ODBC -DSN DE SISTEMA 
+
+ver el nombre del servidor en SQL
+select @@SERVERNAME
+
+DESKTOP-5K1SGH5\SQLEXPRESS-- ESTE ES MI SERVIDOR 
+DESCARGAR DRIVER DEL ODBC SI FUERA NECESARIO 
+
+microsoft query ..............................
+
+{CALL SPPRINCIPAL(?,?)}
