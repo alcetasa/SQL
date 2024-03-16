@@ -1,0 +1,55 @@
+--- FUNCIONES DE AGREGACION 
+---- COUNT , SUM , MAX , MIN , AVG 
+
+
+
+
+SELECT COUNT(*) AS CANTIDAD , 
+	   SUM(FREIGHT) AS MONTO_VENTA , 
+	   AVG(FREIGHT) AS PROM_VENTA , 
+	   MAX(FREIGHT) AS MAXIMA_VENTA, 
+	   MIN(FREIGHT) AS MIN_VENTA
+FROM Orders
+
+
+*************************************************************
+--- GROUP BY ---
+*************************************************************
+SELECT EmployeeID , 
+	   SUM(FREIGHT) AS VENTA, 
+	   COUNT(*) AS CANT_VENTAS
+FROM Orders
+GROUP BY EmployeeID 
+
+
+
+----- NECESITO SABER EL MONTO DE VENTAS POR EMPLEADO Y LUGAR DE ENVIO 
+SELECT EmployeeID , ShipCountry ,SUM(FREIGHT) AS VENTA
+FROM Orders
+GROUP BY EmployeeID , ShipCountry
+
+
+SELECT EmployeeID , ShipCountry , SUM(FREIGHT) AS VENTA
+FROM Orders
+WHERE EmployeeID=1 
+GROUP BY EmployeeID , ShipCountry 
+
+
+
+SELECT EmployeeID , ShipCountry , SUM(FREIGHT) AS VENTA
+FROM Orders
+WHERE EmployeeID=1 
+GROUP BY EmployeeID , ShipCountry 
+HAVING SUM(FREIGHT)>70
+
+
+
+*************************************************************
+--- ORDER BY --- ORDER LA INFORMACION 
+*************************************************************
+SELECT EmployeeID , ShipCountry , SUM(FREIGHT) AS VENTA
+FROM Orders
+WHERE EmployeeID=1 
+GROUP BY EmployeeID , ShipCountry 
+HAVING SUM(FREIGHT)>70
+ORDER BY   ShipCountry DESC ,VENTA ASC

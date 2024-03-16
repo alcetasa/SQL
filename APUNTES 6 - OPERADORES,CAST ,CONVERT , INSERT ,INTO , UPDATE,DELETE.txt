@@ -1,0 +1,143 @@
+********************************************
+--- OPERADORES NUMERICOS 
+-- +´, - , * , / 
+********************************************
+SELECT * from [Order Details] 
+SELECT a.UnitPrice,a.UnitPrice,a.UnitPrice*a.Quantity AS P_FINAL from [Order Details] a
+
+
+
+select a.UnitPrice, a.Quantity, 
+	   a.UnitPrice*a.Quantity as P_FINAL_MULTI, 
+	   A.UnitPrice - A.Quantity AS P_FINAL_REST, 
+	   A.UnitPrice + A.Quantity AS P_FINAL_SUMA, 
+	   A.UnitPrice / A.Quantity AS P_FINAL_DIV, 
+	   CASE 
+			WHEN A.Quantity=0 THEN 0 
+			ELSE A.UnitPrice / A.Quantity END AS P_FINAL_DIV2
+from [Order Details] a
+
+********************************************
+---- CONVERT , CAST 
+--1.- DE TEXTO A NUMERICO 
+********************************************
+
+SELECT '23' AS VALOR , 
+	  CONVERT(INT ,'23') AS VALOR2, 
+	  CAST ('23' AS INT ) AS VALOR3
+
+SELECT CAST ('001' AS INT)  
+
+SELECT Extension,FirstName
+FROM [dbo].[Employees]
+
+SELECT  CAST (Extension AS INT) AS VALOR, 
+		CAST( FirstName AS INT) AS VALOR_2
+FROM [dbo].[Employees]
+
+
+--2.- UN NUMERO A TEXTO 
+
+SELECT 23  AS NUMERO , 
+	   CAST(23 AS VARCHAR(20) ) AS VALOR_1, 
+	   CONVERT(VARCHAR(20),23 ) AS VALOR_2
+
+-- 3.- FECHA A TEXTO 
+SELECT GETDATE() AS FECHA , 
+	   CAST(FORMAT(GETDATE(),'dd-MM-yyyy') AS VARCHAR(50) ) AS VALOR_1, 
+	   CONVERT(VARCHAR(50),FORMAT(GETDATE(),'dd-MM-yyyy')  ) AS VALOR_2
+
+********************************************
+----------------- INSERT ----------------------
+********************************************
+CREATE TABLE T_EMPLEADO (
+COD_EMPLEADO INT, 
+APE_EMP VARCHAR(100), 
+NOM_EMP VARCHAR(100)
+)
+
+
+-- 1.- INSERTO UN REGISTRO UNICO 
+
+INSERT INTO T_EMPLEADO 
+(COD_EMPLEADO,APE_EMP,NOM_EMP)
+VALUES(1,'SANDOVAL','JEAN PIERRE')
+
+SELECT *
+FROM T_EMPLEADO
+------ RECIBIENDO NULL POR DEFECTO 
+
+
+INSERT INTO T_EMPLEADO 
+(COD_EMPLEADO,APE_EMP)
+VALUES(2,'ROJAS')
+
+
+
+-- 2.- INSERT EN LOTE DE REGISTROS DE UNA TABLA FUENTE 
+SELECT EmployeeID  AS COD_EMPLEADO, 
+	   LastName , 
+	   FirstName
+FROM Employees
+
+
+INSERT INTO T_EMPLEADO 
+(COD_EMPLEADO,APE_EMP,NOM_EMP)
+SELECT CAST(EmployeeID AS INT) AS COD_EMPLEADO, 
+	   LastName , 
+	   FirstName
+FROM Employees
+
+SELECT *
+FROM T_EMPLEADO
+
+********************************************
+----------------- INTO-----------CREAR TABLAS A PARTIR DE OTRA TABLA
+********************************************
+-- 3.- INSERTO LOS REGISTROS DESDE UN SELECT Y A LA VEZ CREO LA TABLA 
+
+SELECT CustomerID , CompanyName , ContactName INTO T_EMP_GERMANY
+FROM Customers
+WHERE Country='Germany'
+
+
+DROP TABLE T_EMP_GERMANY 
+
+SELECT CAST (CustomerID AS VARCHAR(50)) AS COD_CLIENTE , 
+	   CompanyName , 
+	   ContactName INTO T_EMP_GERMANY2
+FROM Customers
+WHERE Country='Germany'
+
+
+
+
+----------------------------------------------
+------------ DELETE --------------------------
+
+
+--SINTAXIS 
+DELETE FROM NOMBRE_TABLA ; 
+
+
+USE Northwind
+
+SELECT CustomerID , CompanyName , ContactName INTO T_EMP_GERMANY
+FROM Customers
+WHERE Country='Germany'
+SELECT * FROM T_EMP_GERMANY
+
+
+--1.- ENCONTRAR LOS REGISTROS A SER ELIMINADOS 
+SELECT *
+FROM T_EMP_GERMANY
+WHERE CustomerID IN ('FRANK','MORGK')
+
+-- 2.- ELIMINAR LOS REGISTROS 
+DELETE FROM T_EMP_GERMANY 
+WHERE CustomerID IN ('FRANK','MORGK')
+
+SELECT *
+FROM T_EMP_GERMANY
+
+

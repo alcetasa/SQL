@@ -1,0 +1,93 @@
+----------------------------------------------------------------------------------------------------------------------------------
+---TRANSACT SQL , SELECT --- FUNCIONES ------
+----------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------
+
+--------- FUNCIONES DE TRANSACT - TEXTO ----
+*************
+-- CONCAT 
+-- CONCATENAR LOS VALORES LISTADOS EN UN CONCAT 
+*************
+
+SELECT FirstName , LEN(FirstName) AS LONGITUD
+FROM Employees
+SELECT LastName , FirstName , CONCAT(LastName,' ,',FirstName) AS NOM_COMPLETO 
+FROM Employees
+
+*************
+-- CHARINDEX 
+-- BUSCA UN VALOR DE CADENA Y RETORNA LA PRIMERA POSICION DEL VALOR 
+*************
+SELECT FirstName , CHARINDEX('A',FirstName) AS POSICION
+FROM Employees
+
+--- UTILIZANDO EL CHARINDEX PARA FILTRO 
+SELECT FirstName , CHARINDEX('A',FirstName) AS POSICION , 
+	   CHARINDEX('E',FirstName) AS POSICION2
+FROM Employees
+WHERE CHARINDEX('A',FirstName) >0 AND CHARINDEX('E',FirstName) >0
+
+*************
+--- LEN
+---- DEVUELVE LA LONGITUD DE UNA CADENA 
+*************
+SELECT FirstName , LEN(FirstName) AS LONGITUD
+FROM Employees
+
+
+*************
+--- REPLACE 
+-- BUSCAS UN VALOR A REMPLZAR POR OTRO 
+*************+
+
+SELECT FirstName , REPLACE(FirstName,'A','123') AS REEMPLAZO
+FROM Employees
+
+*************
+---- LEFT , RIGHT 
+*************
+
+SELECT FirstName , 
+	   LEFT(FirstName,2 ) AS PRIMERA_LETRA, 
+	   RIGHT(FirstName,2) AS DOS_ULTIMAS
+FROM Employees 
+
+
+*************
+--- SUBSTRING 
+--- CORTAR LA PALABRA DESDE UNA POSICION HASTA LA LONGITUD QUE NECESITEMOS 
+*************
+
+SELECT FirstName , SUBSTRING(FIRSTNAME,2,4) AS CORTAR_PALABRA
+FROM Employees 
+
+
+--- NECESITO , CORTAR LA PALABRA , 
+--- DESDE CUANDO SE ENCUENTRE EL VALOR DOS POSICIONES MAS 
+SELECT FirstName , CHARINDEX('A',FirstName), 
+		CASE 
+		WHEN CHARINDEX('A',FirstName)=0 THEN ' '
+		ELSE SUBSTRING(FirstName,CHARINDEX('A',FirstName),2) END  AS PALABRA
+FROM Employees
+
+
+**************************
+--- LTRIM , RTRIM , TRIM 
+**************************
+
+
+SELECT  LTRIM('  JUAN') AS NOMBRE , RTRIM('JUAN  ') AS NOMBRE_2 , 
+		RTRIM(LTRIM('  JUAN  ')) AS NOMBRE_3, 
+		TRIM('  JUAN  ') AS NOMBRE_4
+
+**************************
+--- UPPER , LOWER 
+**************************
+
+SELECT LastName , 
+	   UPPER(LastName) AS MAYUSCULA , 
+	   LOWER(LASTNAME) AS MINISCULA, 
+	   ' DATOS' AS CAMPO3
+FROM Employees
+

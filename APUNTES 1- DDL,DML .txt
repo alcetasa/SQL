@@ -1,0 +1,241 @@
+---------------------------------------------------------------------------
+---------- DDL ---------------LENGUAJE DE DEFINICION DE LOS DATOS (OBJETOS)
+---------------------------------------------------------------------------
+--CREATE , ALTER , DROP 
+
+
+*************************************************************
+--- CREATE TABLE --- 
+*************************************************************
+1.CREAR UNA TABLA 
+USE SESION_1
+
+CREATE TABLE TC_EMPLEADO(
+ID_EMPLEADO INT NOT NULL,
+NOMBRE VARCHAR(50) NOT NULL,
+EDAD INT,
+FEC_NACIMIENTO DATE,
+SUELDO DECIMAL(18,3)
+)
+
+
+*************************************************************
+--- DROP --- ELIMINAR LA TABLA 
+*************************************************************
+DROP TABLE TC_EMPLEADO 
+
+*************************************************************
+---- ALTER 
+*************************************************************
+-- ALTERAR UNA TABLA 
+---1.- AGREGAR UN NUEVO CAMPO A LA TABLA
+ALTER TABLE TC_EMPLEADO
+ADD GENERO CHAR(10)
+--- 2.- ELIMINAR UNA COLUMNA DE LA TABLA 
+ALTER TABLE TC_EMPLEADO
+DROP COLUMN SUELDO
+
+---3.- CAMBIAR EL TIPO DE DATO DE UNA COLUMNA 
+ALTER TABLE TC_EMPLEADO
+ALTER COLUMN GENERO INT
+
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+---------- DML ---------------LENGUJE DE MANIPULACION DE DATOS 
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- 
+
+--SELECT , INSERT , UPDATE , DELETE 
+
+*************************************************************
+--- SELECT ---------- 
+*************************************************************
+
+SELECT * FROM  TC_EMPLEADO
+
+
+SELECT COD , NOMBRE 
+FROM ANIMALES
+
+*************************************************************
+--- INSERT ---------- 
+*************************************************************
+INSERT INTO T_CLIENTE_C
+(ID_EMPLEADO ,NOMBRE,EDAD,FEC_NACIMIENTO,SUELDO )
+values(1,'JUAN','01-12-1996',1500),
+	  (),
+	  (), 
+	  (),
+	  ()
+
+
+
+*************************************************************
+---WHERE ---------- CARACTERES
+*************************************************************
+
+SELECT *
+FROM Orders
+WHERE ShipCountry='france'
+
+*************************************************************
+--- OR ---------- 
+*************************************************************
+SELECT *
+FROM Orders
+WHERE ShipCountry='france'  OR ShipCountry='Belgium'
+
+*************************************************************
+--- AND ---------- 
+*************************************************************
+
+SELECT *
+FROM Orders
+WHERE ShipCountry='france' AND EmployeeID=5
+
+
+*************************************************************
+--- AND Y OR ---------- 
+*************************************************************
+
+
+SELECT *
+FROM Orders  
+WHERE (ShipCountry='france'  OR ShipCountry='Belgium') AND EmployeeID=5
+
+SELECT *
+FROM Orders  
+WHERE ShipCountry='france' OR ShipCountry='AUSTRIA' OR ShipCountry='BRAZIL'
+
+*************************************************************
+--- IN---------- (PARA NO UTILIZAR MUCHO EL OR)
+*************************************************************
+
+SELECT *
+FROM Orders
+WHERE ShipCountry IN ('france','austria','brazil') 
+
+
+*************************************************************
+--- LIKE ---------- 
+*************************************************************
+
+SELECT *
+FROM Customers
+WHERE ContactName LIKE 'li%'--EMPIEZAN CON li
+
+
+SELECT *
+from Customers
+WHERE ContactName LIKE '%LI'--TERMINAN CON li
+
+SELECT *
+from Customers
+WHERE ContactName LIKE '%li%'
+
+*************************************************************
+---WHERE ---------- NUMERICOS
+*************************************************************
+--- 
+
+SELECT *
+FROM Orders
+WHERE EmployeeID=5
+
+
+SELECT *
+FROM Orders
+WHERE FREIGHT > 51.3
+
+SELECT *
+FROM Orders
+WHERE FREIGHT >= 51.3
+
+
+SELECT *
+FROM Orders
+WHERE Freight >= 50 and Freight <= 100
+
+
+----- negacion 
+--- != , <>  --- diferente de 
+
+SELECT * 
+FROM Orders --830 -- 77
+WHERE ShipCountry != 'France'
+
+
+SELECT * 
+FROM Orders --830 -- 77
+WHERE ShipCountry <> 'France'
+
+
+*************************************************************
+---WHERE---------- FECHAS
+*************************************************************
+select *
+from Orders
+where OrderDate='1998-03-02'
+
+select *
+from Orders 
+where OrderDate >= '1998-03-01' and OrderDate <= '1998-03-05'
+
+
+*************************************************************
+---BETWEEN---------- FECHAS
+*************************************************************
+select *
+from Orders 
+where OrderDate between '1998-03-01' and '1998-03-05'
+
+*************************************************************
+---BETWEEN---------- NUMERICOS
+*************************************************************
+SELECT *
+FROM Orders 
+WHERE Freight between 50 and 100 
+
+
+SELECT * 
+FROM Orders --830 -- 77
+WHERE ShipCountry <> 'France'
+
+
+*************************************************************
+---NOT---------- CARACTERES
+*************************************************************
+
+-- NOT
+
+--- IN
+
+SELECT *
+FROM Orders
+WHERE ShipCountry NOT IN ('france','austria','brazil') 
+
+--- LIKE
+
+select *
+from Customers
+WHERE ContactName NOT LIKE 'li%'
+
+*************************************************************
+---NULL ---------- 
+*************************************************************
+	
+SELECT *
+FROM Orders
+WHERE ShipRegion IS NULL
+
+*************************************************************
+---AS ---------- CARACTERES
+*************************************************************
+
+SELECT OrderID, OrderID AS COD_VENTA
+FROM Orders
+
+
+
+
+
+
+

@@ -1,0 +1,108 @@
+****************************************************************
+--- SELECT A OTRA BASE DE DATOS--- NO USARLO MEJOR USAR ETL
+****************************************************************
+SELECT 
+FROM TESIS.DBO.TABLA
+
+
+
+CREATE TABLE T_CLIENTE_C( 
+(COD_CLIENT INT , 
+NOMBRE_CLIENTE VARCHAR(150), 
+NUM_TELEFONO INT
+)
+
+INSERT INTO T_CLIENTE_C(
+COD_CLIENTE,NOMBRE_CLIENTE,NUM_TELEFONO)
+VALUES(1,'JUAN',994567823),
+	  (2,'JOSE',996767823),
+	  (3,'MARIA',996677823), 
+	  (4,'RAUL',996767825),
+	  (5,'MARCO',996677825)
+
+INSERT INTO T_CLIENTE_C
+COD_CLIENTE,NOMBRE_CLIENTE,NUM_TELEFONO)
+VALUES(6,'FIORELA',996677825)
+
+
+SELECT NUM_TELEFONO , COUNT(*)
+FROM  T_CLIENTE_C
+GROUP BY NUM_TELEFONO
+HAVING COUNT(*) >1
+
+****************************************************************
+---SUBQUERY 
+****************************************************************
+SELECT  *
+FROM T_CLIENTE_C
+WHERE NUM_TELEFONO
+IN (SELECT NUM_TELEFONO
+	FROM  T_CLIENTE_C
+	GROUP BY num_telefono
+	HAVING count(*) >1 )
+
+
+
+****************************************************************
+--- WITH CTE --- COMMON TABLE EXPRESION 
+****************************************************************
+
+--CONSULTAR TODO -----
+WITH T_CANTIDAD AS (SELECT NUM_TELEFONO, COUNT(*) CANT
+					from T_CLIENTE_C
+					group by NUM_TELEFONO)
+SELECT *
+FROM T_CANTIDAD
+WHERE CANT=2
+----------------
+
+
+-------------------------------
+
+--DECLARAR UNA TABLA TEMPORAL 
+CREATE TABLE ##T_PERSONAS(
+COD_CLIENTE INT 
+)
+-- SE ELIMINA CUANDO CERRAMOS SESION 
+--- # , PARA UTILIZARLA EN TU SESION 
+--- ## , PARA QUE OTRA SESION LO PUEDA , GLOBAL 
+
+
+****************************************************************
+--- CASE--- 
+****************************************************************
+SELECT Freight, 
+CASE 
+	WHEN Freight BETWEEN 0 AND 80 THEN 'BAJA'
+	WHEN Freight BETWEEN 80.01 AND 120 THEN 'MEDIA'
+	ELSE 'ALTO' 
+	END 
+	AS TIPO_VENTA	
+FROM Orders
+---------------------
+SELECT Freight, 
+	   CASE 
+			WHEN Freight < 120 THEN 'MEDIA'
+			WHEN Freight < 80 THEN 'BAJA'			
+			ELSE 'ALTO' END AS TIPO_VENTA
+		
+FROM Orders
+---------------------
+
+*************
+--- SUBSTRING 
+--- CORTAR LA PALABRA DESDE UNA POSICION HASTA LA LONGITUD QUE NECESITEMOS 
+*************
+
+SELECT FirstName , SUBSTRING(FIRSTNAME,2,4) AS CORTAR_PALABRA
+FROM Employees 
+
+
+--- NECESITO , CORTAR LA PALABRA , 
+--- DESDE CUANDO SE ENCUENTRE EL VALOR DOS POSICIONES MAS 
+SELECT FirstName , CHARINDEX('A',FirstName), 
+		CASE 
+		WHEN CHARINDEX('A',FirstName)=0 THEN ' '
+		ELSE SUBSTRING(FirstName,CHARINDEX('A',FirstName),2) END  AS PALABRA
+FROM Employees
+

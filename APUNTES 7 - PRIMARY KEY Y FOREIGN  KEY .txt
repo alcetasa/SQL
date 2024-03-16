@@ -1,0 +1,73 @@
+***********************************************************
+--- RESTRICCIONES --- A NIVEL TABLA 
+***********************************************************
+
+
+***********************************************************
+---------- PRIMARY KEY --------------------
+***********************************************************
+
+CREATE TABLE T_CLIENT_PERSONA(
+COD_CLIENTE INT,
+NOMBRE VARCHAR(100),
+APE_PATERNO VARCHAR(100)
+CONSTRAINT PK_T_CLIENTE PRIMARY KEY(COD_CLIENTE))
+
+
+SELECT * FROM T_CLIENT_PERSONA
+INSERT INTO T_CLIENT_PERSONA 
+(COD_CLIENTE,NOMBRE,APE_PATERNO)
+--VALUES(1,'JOSE','RODRIGUEZ')
+--VALUES(2,'JUAN','RODRIGUEZ')
+VALUES(1,'JEAN','SANDOVAL')
+
+
+SELECT *
+FROM T_CLIENT_PERSONA
+
+
+CREATE TABLE T_CLIEN_PERSONA_2
+( COD_CLIENTE INT PRIMARY KEY , 
+NOMBRE VARCHAR(100), 
+APE_PATERNO VARCHAR(100))
+
+
+
+***********************************************************
+--SINTAXIS PARA DEFINIR MAS DE DOS CAMPOS DE PRIMARY KEY 
+************************************************************
+CREATE TABLE T_CLIEN_PERSONA3 
+( COD_CLIENTE INT , 
+ COD_PROD INT, 
+NOMBRE VARCHAR(100), 
+APE_PATERNO VARCHAR(100), 
+CONSTRAINT PK_T_CLIENTE2 PRIMARY KEY (COD_CLIENTE,COD_PROD)
+)
+
+
+
+***********************************************************
+---------- FOREIGN KEY --------------------
+***********************************************************
+CREATE TABLE T_VENTAS 
+( ID_VENTA INT , 
+ MONTO DECIMAL(19,4), 
+ FEC_VENTA DATE , 
+ COD_CLIENTE INT , 
+ CONSTRAINT FK_CLIENTE_VENTAS FOREIGN KEY (COD_CLIENTE)
+ REFERENCES T_CLIEN_PERSONA (COD_CLIENTE)
+)
+
+INSERT INTO T_VENTAS 
+(ID_VENTA , MONTO , FEC_VENTA, COD_CLIENTE)
+VALUES(3,80,'2020-01-01',5)
+
+SELECT *
+FROM T_CLIEN_PERSONA
+
+SELECT *
+FROM T_VENTAS
+
+
+
+
